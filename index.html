@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Play VIP Tip Top Game - Cross and Circle. Experience luxury gaming with diamond, pink and gold design. Mobile-friendly and responsive.">
+    <meta name="keywords" content="VIP game, cross and circle, tip top game, luxury gaming, mobile game, diamond design">
+    <meta name="author" content="VIP Gaming">
+    <title>VIP Tip Top Game - Cross and Circle | Luxury Gaming Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --pink: #ff4d94;
+            --gold: #ffd700;
+            --light-gold: #fff9c4;
+            --dark-purple: #1a0b2e;
+            --medium-purple: #2d1b42;
+            --light-purple: #4a2c6d;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-purple) 0%, var(--medium-purple) 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            z-index: 2;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--pink), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 4px;
+            background: linear-gradient(to right, var(--pink), var(--gold));
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.7);
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            color: var(--light-gold);
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: rgba(42, 21, 65, 0.8);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .cell:hover {
+            background: rgba(75, 35, 110, 0.9);
+            transform: scale(1.08) rotateY(5deg);
+            border-color: rgba(255, 215, 0, 0.6);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .cell.x::before {
+            content: "✕";
+            color: var(--pink);
+            text-shadow: 0 0 15px rgba(255, 105, 180, 0.9);
+            animation: popIn 0.3s ease;
+        }
+
+        .cell.o::before {
+            content: "○";
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.9);
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .cell.win {
+            background: rgba(255, 215, 0, 0.25);
+            border-color: var(--gold);
+            animation: winPulse 1.5s infinite;
+        }
+
+        @keyframes winPulse {
+            0% { 
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+                transform: scale(1.05);
+            }
+            100% { 
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+                transform: scale(1);
+            }
+        }
+
+        .controls {
+            display: flex;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-start {
+            background: linear-gradient(to right, var(--pink), #ff1493);
+            color: white;
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5);
+        }
+
+        .btn-reset {
+            background: linear-gradient(to right, var(--gold), #ffa500);
+            color: #333;
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(255, 105, 180, 0.7);
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+        }
+
+        .status {
+            font-size: 1.8rem;
+            margin: 20px 0;
+            text-align: center;
+            min-height: 60px;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 500px;
+            width: 100%;
+            font-weight: 600;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .win-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .win-animation.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .win-content {
+            text-align: center;
+            background: linear-gradient(135deg, var(--medium-purple), var(--dark-purple));
+            padding: 40px;
+            border-radius: 20px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.7);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .win-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--pink), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .win-content p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--light-gold);
+        }
+
+        .diamond-shower {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .diamond {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, var(--pink), var(--gold));
+            transform: rotate(45deg);
+            opacity: 0;
+            animation: diamondFall 3s linear forwards;
+        }
+
+        @keyframes diamondFall {
+            0% {
+                top: -50px;
+                opacity: 0;
+                transform: rotate(45deg) scale(0.5);
+            }
+            10% {
+                opacity: 1;
+                transform: rotate(45deg) scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+                transform: rotate(45deg) scale(0.5);
+            }
+        }
+
+        .floating-diamonds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-diamond {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, var(--pink), var(--gold));
+            transform: rotate(45deg);
+            opacity: 0.7;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(45deg) scale(1); }
+            50% { transform: translateY(-40px) rotate(45deg) scale(1.1); }
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            color: var(--light-gold);
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .game-board {
+                max-width: 90vw;
+                padding: 20px;
+                grid-gap: 10px;
+            }
+            
+            .cell {
+                font-size: 2.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .win-content h2 {
+                font-size: 2.5rem;
+            }
+            
+            .win-content p {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1.1rem;
+            }
+            
+            .status {
+                font-size: 1.4rem;
+                padding: 12px 20px;
+            }
+            
+            .cell {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-diamonds" id="floatingDiamonds">
+        <!-- Floating diamonds will be generated by JavaScript -->
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>VIP TIP TOP GAME</h1>
+            <p class="tagline">Cross and Circle - Experience Luxury Gaming</p>
+        </header>
+        
+        <div class="game-container">
+            <div class="status" id="status">Player X's Turn</div>
+            
+            <div class="game-board" id="gameBoard">
+                <!-- Game cells will be generated by JavaScript -->
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-start" id="startBtn">
+                    <i class="fas fa-play"></i> Start Game
+                </button>
+                <button class="btn btn-reset" id="resetBtn">
+                    <i class="fas fa-redo"></i> Reset Game
+                </button>
+            </div>
+        </div>
+        
+        <div class="win-animation" id="winAnimation">
+            <div class="win-content">
+                <h2>You Win!</h2>
+                <p>Congratulations on your victory!</p>
+                <button class="btn btn-reset" id="closeWinBtn">Play Again</button>
+                <div class="diamond-shower" id="diamondShower">
+                    <!-- Diamonds will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>VIP Tip Top Game &copy; 2023 | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameBoard = document.getElementById('gameBoard');
+            const statusDisplay = document.getElementById('status');
+            const startBtn = document.getElementById('startBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const winAnimation = document.getElementById('winAnimation');
+            const closeWinBtn = document.getElementById('closeWinBtn');
+            const diamondShower = document.getElementById('diamondShower');
+            const floatingDiamonds = document.getElementById('floatingDiamonds');
+            
+            let gameActive = true;
+            let currentPlayer = "X";
+            let gameState = ["", "", "", "", "", "", "", "", ""];
+            
+            const winningConditions = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+            
+            // Create floating diamonds for background
+            for (let i = 0; i < 15; i++) {
+                const diamond = document.createElement('div');
+                diamond.classList.add('floating-diamond');
+                diamond.style.left = `${Math.random() * 100}%`;
+                diamond.style.top = `${Math.random() * 100}%`;
+                diamond.style.animationDelay = `${Math.random() * 8}s`;
+                diamond.style.width = `${15 + Math.random() * 20}px`;
+                diamond.style.height = diamond.style.width;
+                floatingDiamonds.appendChild(diamond);
+            }
+            
+            // Create game cells
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.setAttribute('data-cell-index', i);
+                cell.addEventListener('click', handleCellClick);
+                cell.addEventListener('touchstart', handleCellClick, { passive: true });
+                gameBoard.appendChild(cell);
+            }
+            
+            const winningMessage = () => `Player ${currentPlayer} Wins!`;
+            const drawMessage = () => `Game ended in a draw!`;
+            const currentPlayerTurn = () => `Player ${currentPlayer}'s Turn`;
+            
+            statusDisplay.innerHTML = currentPlayerTurn();
+            
+            function handleCellClick(clickedCellEvent) {
+                const clickedCell = clickedCellEvent.target;
+                const clickedCellIndex = parseInt(clickedCell.getAttribute('data-cell-index'));
+                
+                if (gameState[clickedCellIndex] !== "" || !gameActive) {
+                    return;
+                }
+                
+                handleCellPlayed(clickedCell, clickedCellIndex);
+                handleResultValidation();
+            }
+            
+            function handleCellPlayed(clickedCell, clickedCellIndex) {
+                gameState[clickedCellIndex] = currentPlayer;
+                clickedCell.classList.add(currentPlayer.toLowerCase());
+            }
+            
+            function handleResultValidation() {
+                let roundWon = false;
+                let winningLine = [];
+                
+                for (let i = 0; i < winningConditions.length; i++) {
+                    const winCondition = winningConditions[i];
+                    let a = gameState[winCondition[0]];
+                    let b = gameState[winCondition[1]];
+                    let c = gameState[winCondition[2]];
+                    
+                    if (a === '' || b === '' || c === '') {
+                        continue;
+                    }
+                    
+                    if (a === b && b === c) {
+                        roundWon = true;
+                        winningLine = winCondition;
+                        break;
+                    }
+                }
+                
+                if (roundWon) {
+                    statusDisplay.innerHTML = winningMessage();
+                    gameActive = false;
+                    
+                    // Highlight winning cells
+                    winningLine.forEach(index => {
+                        document.querySelector(`[data-cell-index="${index}"]`).classList.add('win');
+                    });
+                    
+                    // Show win animation
+                    showWinAnimation();
+                    
+                    return;
+                }
+                
+                let roundDraw = !gameState.includes("");
+                if (roundDraw) {
+                    statusDisplay.innerHTML = drawMessage();
+                    gameActive = false;
+                    return;
+                }
+                
+                handlePlayerChange();
+            }
+            
+            function showWinAnimation() {
+                // Create diamond shower
+                for (let i = 0; i < 50; i++) {
+                    const diamond = document.createElement('div');
+                    diamond.classList.add('diamond');
+                    diamond.style.left = `${Math.random() * 100}%`;
+                    diamond.style.animationDelay = `${Math.random() * 3}s`;
+                    diamond.style.width = `${20 + Math.random() * 30}px`;
+                    diamond.style.height = diamond.style.width;
+                    diamondShower.appendChild(diamond);
+                }
+                
+                winAnimation.classList.add('active');
+            }
+            
+            function hideWinAnimation() {
+                winAnimation.classList.remove('active');
+                // Clear diamonds
+                diamondShower.innerHTML = '';
+            }
+            
+            function handlePlayerChange() {
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                statusDisplay.innerHTML = currentPlayerTurn();
+            }
+            
+            startBtn.addEventListener('click', startGame);
+            resetBtn.addEventListener('click', resetGame);
+            closeWinBtn.addEventListener('click', function() {
+                hideWinAnimation();
+                resetGame();
+            });
+            
+            function startGame() {
+                gameActive = true;
+                currentPlayer = "X";
+                gameState = ["", "", "", "", "", "", "", "", ""];
+                statusDisplay.innerHTML = currentPlayerTurn();
+                
+                document.querySelectorAll('.cell').forEach(cell => {
+                    cell.classList.remove('x');
+                    cell.classList.remove('o');
+                    cell.classList.remove('win');
+                });
+            }
+            
+            function resetGame() {
+                startGame();
+                hideWinAnimation();
+            }
+            
+            // Initialize the game
+            startGame();
+        });
+    </script>
+</body>
+</html>
